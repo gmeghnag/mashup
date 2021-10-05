@@ -1,5 +1,5 @@
 FROM docker.io/python:3.6-alpine
-RUN pip install flask
+RUN pip install flask requests
 EXPOSE 8080
 USER root
 COPY . /mashup
