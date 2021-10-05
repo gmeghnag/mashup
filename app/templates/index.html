@@ -10,9 +10,13 @@
             Mashup
         </div>
     </div>
-    <div style="margin: 20px;">
+    <div style="margin: 20px; height: 200px; width: 300px;">
         <code>
-            {{ body | tojson_pretty | safe }}
+            {% for k, v in headers.itervalues() %}
+            <div>
+              {{k}} : {{v}}
+            </div>
+            {% endfor %}
         </code>
     </div>
   </body>

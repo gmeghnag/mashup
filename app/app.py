@@ -4,15 +4,11 @@ from flask import Flask, render_template, make_response, request
 app = Flask(__name__)
 
 
-def to_pretty_json(value):
-    return json.dumps(value, sort_keys=True,
-                      indent=4, separators=(',', ': '))
-
-app.jinja_env.filters['tojson_pretty'] = to_pretty_json
-
 @app.route('/', methods=['GET'])
 def index():
-    headers = dict(request.headers)
+    
+    _headers = dict(request.headers)
+    for key
     resp = make_response(render_template("index.html", headers=headers))
     resp.headers['Content-Type'] = 'text/html'
     return (resp, 200)
