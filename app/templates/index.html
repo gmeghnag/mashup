@@ -14,34 +14,36 @@
         </button>
         ​<div id="headers-editor" style="visibility: hidden; height: 250px; width: 300px; background-color: floralwhite; border: solid 1px black; position: fixed; top: 50px; right: 30px; z-index: 1;">
             <div style="text-align: center; margin-top: 5px; margin-bottom: 5px;">WRITE HERE YOUR HEADERS</div>
-            <textarea id="multiliner" name="multiliner" rows="10" style="width: 90%; height: 170px; margin-right: 5%; margin-left: 5%;">{&#13;&#10; "Country": "Italia",&#13;&#10; "Version": "1"&#13;&#10;}</textarea>
+            <textarea id="multiliner" name="multiliner" rows="10" style="width: 90%; height: 170px; margin-right: 5%; margin-left: 5%;">{&#13;&#10; "X-Country": "Italia",&#13;&#10; "X-Version": "1"&#13;&#10;}</textarea>
             <div style="justify-content: center; display: flex; margin-top: 10px;">
                 <button style="margin-right: 20px;" onclick="hideElementbyId('headers-editor')">CLOSE</button>
                 <button onclick="executePost('multiliner')">SUBMIT</button>
             </div>
         </div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
     </div>
-    <div id="get-request-div" style="margin: 20px; position: fixed; top: 60px; width: 100%;">
-        <div  style="margin-bottom: 10px; font-size: 14px;">
-            <b>GET REQUEST HEADERS</b>
-        </div>
-        <div style="height: 400px; width: 90%; overflow-y: auto;">
-            <code>
-                {% for header_key, header_value in headers.items() %}
-                <div>
-                  {{header_key}} : {{header_value}}
-                </div>
-                {% endfor %}
-            </code>
+    <div id="info-div" style="margin: 20px; position: fixed; top: 60px; width: 100%;">
+        <div style="margin-bottom: 10px; font-size: 14px;">
+            <code>EXECUTE THE POST REQUEST AGAINST THE FOODS MICROSERVICE CLICKING THE POST BUTTON</code>
         </div>
     </div>
     <div id="post-request-div" style="margin: 20px; visibility: hidden; position: fixed; top: 60px; width: 100%;">
         <div style="margin-bottom: 10px; font-size: 14px;">
             <b>POST REQUEST HEADERS</b>
         </div>
-        <div style="height: 400px; width: 90%; overflow-y: auto;">
+        <div style="height: 250px; width: 95%; overflow-y: auto; background-color: #f7f7f7;">
             <code>
-                <pre id="request">
+                <pre id="request" style="padding-left: 10px;">
+                </pre>
+            </code>
+        </div>
+    </div>
+    <div id="body-response-div" style="margin: 20px; visibility: hidden; position: fixed; top: 380px; width: 100%;">
+        <div style="margin-bottom: 10px; font-size: 14px;">
+            <b>RESPONSE BODY</b>
+        </div>
+        <div style="height: 200px; width: 95%; overflow-y: auto; background-color: #f7f7f7;">
+            <code>
+                <pre id="body" style="padding-left: 10px;">
                 </pre>
             </code>
         </div>
@@ -61,17 +63,34 @@
             try {
                 var headers = JSON.parse(innerTxt);
                 hideElementbyId('headers-editor');
-                fetch("/", {
+                fetch("/headers", {
                     method: "POST", 
-                    body: JSON.stringify({element: "barium"}),
+                    body: JSON.stringify({}),
                     headers: headers,
                 })
                 .then(function(response) {
                     return response.json().then(function(json) {
-                        myRequest = document.getElementById('request')
-                        myRequest.innerHTML = JSON.stringify(json, null, 4);
-                        hideElementbyId('get-request-div')
+                        requestHeaders = document.getElementById('request')
+                        requestHeaders.innerHTML = JSON.stringify(json, null, 4);
+                        hideElementbyId('info-div')
                         displayElementbyId('post-request-div')
+                    });
+                })
+                .catch((error) => {
+                  alert(error)
+                });
+
+                fetch("/foods", {
+                    method: "POST", 
+                    body: JSON.stringify({}),
+                    headers: headers,
+                })
+                .then(function(response) {
+                    return response.json().then(function(json) {
+                        responseBody = document.getElementById('body')
+                        responseBody.innerHTML = JSON.stringify(json, null, 4);
+                        hideElementbyId('info-div')
+                        displayElementbyId('body-response-div')
                     });
                 })
                 .catch((error) => {
