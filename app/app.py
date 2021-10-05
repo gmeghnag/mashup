@@ -8,7 +8,6 @@ app = Flask(__name__)
 def index():
     
     _headers = dict(request.headers)
-    for key
     resp = make_response(render_template("index.html", headers=headers))
     resp.headers['Content-Type'] = 'text/html'
     return (resp, 200)
