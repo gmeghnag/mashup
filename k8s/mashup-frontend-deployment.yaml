@@ -23,7 +23,7 @@ spec:
       containers:
       - name: frontend
         image: docker.io/gmeghnag/mashup-frontend:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: FOODS_MICROSERVICE_HOST
           value: "http://foods.mashup.svc.cluster.local"
