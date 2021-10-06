@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-v1
+  labels:
+    app: frontend
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: frontend
+        version: v1
+    spec:
+      serviceAccountName: mashup-frontend
+      containers:
+      - name: frontend
+        image: docker.io/gmeghnag/mashup-frontend:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: FOODS_MICROSERVICE_HOST
+          value: "http://foods.mashup.svc.cluster.local"
+        - name: FOODS_MICROSERVICE_PORT
+          value: "8080"
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foods-v1
+  labels:
+    app: foods
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foods
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: foods
+        version: v1
+    spec:
+      serviceAccountName: mashup-foods
+      containers:
+      - name: foods
+        image: docker.io/gmeghnag/mashup-foods:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
