@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- k8s/mashup-foods-ServiceAccount.yaml
+- k8s/mashup-foods-Service.yaml
+- k8s/mashup-foods-v1-deployment.yaml
+- k8s/mashup-foods-v2-deployment.yaml
+- k8s/mashup-frontend-ServiceAccount.yaml
+- k8s/mashup-frontend-Service.yaml
+- k8s/mashup-frontend-deployment.yaml
