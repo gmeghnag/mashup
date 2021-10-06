@@ -1,4 +1,4 @@
 # Mashup
 ---
 
-Service Mesh testing app
+Service Mesh minimal testing app
