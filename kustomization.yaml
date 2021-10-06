@@ -9,3 +9,5 @@ resources:
 - k8s/mashup-frontend-ServiceAccount.yaml
 - k8s/mashup-frontend-Service.yaml
 - k8s/mashup-frontend-deployment.yaml
+- k8s/mashup-gateway.yaml
+- k8s/mashup-destinationRules.yaml
