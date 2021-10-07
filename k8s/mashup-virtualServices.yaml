@@ -44,7 +44,7 @@ spec:
   http:
   - match:
     - headers:
-        Z-Country:
+        X-Mashup-Country:
           exact: Italia
     route:
     - destination:
@@ -52,7 +52,7 @@ spec:
         subset: v1
   - match:
     - headers:
-        Z-Country:
+        X-Mashup-Country:
           exact: Spain
     route:
     - destination:

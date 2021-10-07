@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <title>Mashup</title>
   </head>
   <body style="width: 100%; height: 100%; margin: 0px;">
@@ -14,7 +14,7 @@
         </button>
         ​<div id="headers-editor" style="visibility: hidden; height: 250px; width: 300px; background-color: floralwhite; border: solid 1px black; position: fixed; top: 50px; right: 30px; z-index: 1;">
             <div style="text-align: center; margin-top: 5px; margin-bottom: 5px;">WRITE HERE YOUR HEADERS</div>
-            <textarea id="multiliner" name="multiliner" rows="10" style="width: 90%; height: 170px; margin-right: 5%; margin-left: 5%;">{&#13;&#10; "Z-Country": "Italia"&#13;&#10;}</textarea>
+            <textarea id="multiliner" name="multiliner" rows="10" style="width: 90%; height: 170px; margin-right: 5%; margin-left: 5%;">{&#13;&#10; "X-Mashup-Country": "Italia"&#13;&#10;}</textarea>
             <div style="justify-content: center; display: flex; margin-top: 10px;">
                 <button style="margin-right: 20px;" onclick="hideElementbyId('headers-editor')">CLOSE</button>
                 <button onclick="executePost('multiliner')">SUBMIT</button>
@@ -61,46 +61,43 @@
         function executePost(id) {
             let innerTxt = document.getElementById(id).value;
             try {
-                var headers = JSON.parse(innerTxt);
+                let headers = JSON.parse(innerTxt);
+                let requestHeaders = document.getElementById('request');
+                let responseBody = document.getElementById('body');
+                requestHeaders.innerHTML = "";
                 hideElementbyId('headers-editor');
-                fetch("/headers", {
-                    method: "POST", 
-                    body: JSON.stringify({}),
-                    headers: headers,
-                })
-                .then(function(response) {
-                    return response.json().then(function(json) {
-                        requestHeaders = document.getElementById('request')
-                        requestHeaders.innerHTML = JSON.stringify(json, null, 4);
-                        hideElementbyId('info-div')
-                        displayElementbyId('post-request-div')
-                    });
-                })
-                .catch((error) => {
-                  alert(error)
-                });
-
+                responseBody.innerHTML = "";
+                let request_headers = {};
                 fetch("/foods", {
                     method: "POST", 
                     body: JSON.stringify({}),
                     headers: headers,
                 })
                 .then(function(response) {
+                    console.log(response.headers);
+                    for (var pair of response.headers.entries()) {
+                        if (pair[0].toLocaleLowerCase().startsWith("x")) {
+                            let key = pair[0]
+                            let value = pair[1]
+                            request_headers[key] = value
+                        }
+                    }
+                    requestHeaders.innerHTML = JSON.stringify(request_headers, null, 4);
+                    hideElementbyId('info-div')
+                    displayElementbyId('post-request-div')
                     return response.json().then(function(json) {
-                        responseBody = document.getElementById('body')
                         responseBody.innerHTML = JSON.stringify(json, null, 4);
-                        hideElementbyId('info-div')
-                        displayElementbyId('body-response-div')
+                        hideElementbyId('info-div');
+                        displayElementbyId('body-response-div');
                     });
                 })
                 .catch((error) => {
-                  alert(error)
+                  alert(error);
                 });
             } catch(error) {
                 alert(error); 
             }
         }
-
     </script>
   </body>
 </html>
